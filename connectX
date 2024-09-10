@@ -1,0 +1,51 @@
+// Command: connect
+if params.len < 3 or params.len > 4 then exit(command_info("connect_usage"))
+
+// Extract connection type
+connection_type = params[0]
+
+// Ensure connection_type is either "ssh" or "ftp" (case-insensitive check)
+if connection_type != "ssh" and connection_type != "ssh" and connection_type != "ftp" and connection_type != "ftp" then
+    exit("Invalid connection type: " + connection_type + ". Supported types are 'ssh' and 'ftp'.")
+end if
+
+// Extract credentials
+credentials = params[1].split("@")
+user = credentials[0]
+password = credentials[1]
+
+// Default port settings based on connection type (case-insensitive)
+if connection_type == "ftp" or connection_type == "ftp" then
+    port = 21 // Default port for FTP
+else if connection_type == "ssh" or connection_type == "ssh" then
+    port = 22 // Default port for SSH
+end if
+
+// Update port if specified
+if params.len == 4 then
+    port = params[3].to_int
+    if typeof(port) != "number" then exit("Invalid port: " + port)
+end if
+
+// Connection attempt
+print("Connecting...")
+
+if connection_type == "ssh" or connection_type == "ssh" then
+    // SSH connection logic
+    shell = get_shell.connect_service(params[2], port, user, password, "ssh")
+    if typeof(shell) == "string" then exit(shell)
+    if shell then
+        shell.start_terminal
+    else
+        print("Connection failed")
+    end if
+else if connection_type == "ftp" or connection_type == "ftp" then
+    // FTP connection logic
+    ftp_shell = get_shell.connect_service(params[2], port, user, password, "ftp") // Pass "ftp" explicitly
+    if typeof(ftp_shell) == "string" then exit(ftp_shell) // Handle any error message returned as a string
+    if ftp_shell then
+        ftp_shell.start_terminal
+    else
+        print("Connection failed")
+    end if
+end if
